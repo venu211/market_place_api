@@ -49,3 +49,8 @@ group :development do
   gem 'spring'
 end
 
+group :test do
+  gem "rspec-rails", "~> 2.14"
+  gem "factory_girl_rails"
+  gem 'ffaker'
+end

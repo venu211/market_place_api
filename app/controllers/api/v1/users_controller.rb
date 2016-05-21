@@ -22,7 +22,13 @@ respond_to :json
 			render json: { errors: user.errors }, status: 422
 		end
 	end
-	
+
+	def destroy
+		user = User.find(params[:id])
+		user.destroy
+		head 204
+	end
+	 
 private
 	def user_params
 		params.require(:user).permit(:email, :password, :password_confirmation)

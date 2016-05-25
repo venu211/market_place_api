@@ -66,5 +66,7 @@ RSpec.configure do |config|
   end
 end
 
+#Including Test Requests
+config.include Request::JsonHelpers, :type => :controller
 end
 

@@ -49,6 +49,8 @@ RSpec.configure do |config|
   # `post` in specs under `spec/controllers`.
   #
   # You can disable this behaviour by removing the line below, and instead
+
+
   # explictly tag your specs with their type, e.g.:
   #
   #     describe UsersController, :type => :controller do
@@ -68,5 +70,12 @@ end
 
 #Including Test Requests
 config.include Request::JsonHelpers, :type => :controller
+config.include Request::HeadersHelpers, :type => :controller
+
+config.before(:each, type: :controller) do
+  include_default_accept_headers
+end
+
+
 end
 

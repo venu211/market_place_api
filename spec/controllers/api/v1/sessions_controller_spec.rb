@@ -15,6 +15,7 @@ describe Api::V1::SessionsController do
 
 			it "returns the user record corresponding to the given credentials" do
 				@user.reload
+				puts "#{@user.inspect}"
 				expect(json_response[:auth_token]).to eql @user.auth_token
 			end
 		
@@ -29,7 +30,7 @@ describe Api::V1::SessionsController do
 				post :create, { session: credentials }
 			end
 
-			it "returms a json with an error" do
+			it "returns a json with an error" do
 				expect(json_response[:errors]).to eql "Invalid email or password"
 			end
 

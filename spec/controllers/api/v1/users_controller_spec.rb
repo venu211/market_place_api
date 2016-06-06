@@ -61,6 +61,7 @@ describe "PUT/PATCH	#update" do
 	context "when it is successfully updated" do
  		before(:each) do
  			@user = FactoryGirl.create(:user)
+ 			#request.headers["Authorization"] = @user.auth_token
  			patch :update, { id: @user.id, user: { email: "newmail@example.com"} }
  		end
  

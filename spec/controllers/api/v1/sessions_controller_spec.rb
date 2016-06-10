@@ -5,17 +5,19 @@ describe Api::V1::SessionsController do
 	describe "Post #create" do
 		before(:each) do
 			@user = FactoryGirl.create(:user)
+			#puts @user.inspect
 		end
 
 		context "when the credentials are correct" do
 			before(:each) do
 				credentials = { email: @user.email, password: "12345678" }
 				post :create, { session: credentials }
+				#puts "#{@user.inspect}"
 			end
 
 			it "returns the user record corresponding to the given credentials" do
 				@user.reload
-				puts "#{@user.inspect}"
+				
 				expect(json_response[:auth_token]).to eql @user.auth_token
 			end
 		

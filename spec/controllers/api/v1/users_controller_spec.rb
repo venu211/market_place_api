@@ -4,9 +4,13 @@ describe Api::V1::UsersController do
 
 #before(:each) { request.headers["Accept"] = "application/vnd.marketplace.v1, #{Mime::JSON}" }
 #before(:each) { request.headers["Content-Type"] = Mime::JSON.to_s }
+before(:each) do
+	@user = FactoryGirl.create(:user)
+	request.headers["Authorization"] = @user.auth_token
+end
+
 describe "Get #show" do 
 	before(:each) do
-		@user = FactoryGirl.create(:user)
 		get :show, id: @user.id
 	end
 
@@ -60,8 +64,6 @@ describe "PUT/PATCH	#update" do
 
 	context "when it is successfully updated" do
  		before(:each) do
- 			@user = FactoryGirl.create(:user)
- 			#request.headers["Authorization"] = @user.auth_token
  			patch :update, { id: @user.id, user: { email: "newmail@example.com"} }
  		end
  
@@ -75,7 +77,6 @@ describe "PUT/PATCH	#update" do
 
 	context "when it is not created" do 
 	 	before(:each) do 
-	 		@user = FactoryGirl.create(:user)
 	 		patch :update, { id: @user.id, user: { email: "bademail.com"} }
 	 	end
 
@@ -95,7 +96,6 @@ end
 
 describe "DELETE #destroy" do
 	before(:each) do
-		@user = FactoryGirl.create(:user)
 		delete :destroy, { id: @user.id }
 	end
 

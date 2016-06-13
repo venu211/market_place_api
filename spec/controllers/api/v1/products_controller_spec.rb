@@ -31,5 +31,100 @@ describe "#GET index" do
 end
 
 
+describe "POST #create" do
+	context "when is successfully created" do
+		before(:each) do
+			user = FactoryGirl.create(:user)
+			@product_attributes = FactoryGirl.attributes_for :product
+			request.headers["Authorization"] = user.auth_token
+			#api_authorization_header user.auth_token
+			post :create, { user_id: user.id, product: @product_attributes }
+		end
+
+		it "renders the json response for the record just created" do
+			product_response = json_response
+			expect(product_response[:title]).to eql @product_attributes[:title]
+		end
+
+		it { should respond_with 201 }
+	end
+
+	context "when it is not created" do
+		before(:each) do
+			user = FactoryGirl.create(:user)
+			@invalid_product_attributes = { title: "Smart TV", price: "twelve dollars" }
+			request.headers["Authorization"] = user.auth_token
+			post :create, { user_id: user.id, product: @invalid_product_attributes }
+		end
+
+		it "renders an error json" do
+			product_response = json_response
+			expect(product_response).to have_key(:errors)
+		end
+
+		it "renders the json error on why the user could not be created" do
+			product_response = json_response
+			expect(product_response[:errors][:price]).to include "is not a number"
+		end
+
+		it { should respond_with 422 }
+	end
+
+end
+
+describe "PATCH #update" do
+	before(:each) do
+		@user = FactoryGirl.create(:user)
+		@product = FactoryGirl.create(:product, user: @user)
+		request.headers["Authorization"] = @user.auth_token
+	end
+
+	context "when is successfully updated" do
+		before(:each) do
+			patch :update, { user_id: @user.id, id: @product.id, product: { title: "An Expensive TV" } }
+		end
+
+		it "renders the json response for the updated product" do
+			product_response = json_response
+			expect(product_response[:title]). to eql "An Expensive TV"
+		end
+
+		it { should respond_with 200 }
+	end
+
+	context "when is not updated" do
+		before(:each) do
+			patch :update, { user_id: @user.id, id: @product.id, product: { price: "two hundred" } }
+		end
+
+		it "renders an error json" do
+			product_response = json_response
+			expect(product_response).to have_key(:errors)
+		end
+
+		it "renders the json reposne on why the user not updated" do
+			product_response = json_response
+			expect(product_response[:errors][:price]).to include "is not a number"
+		end
+		
+		it { should respond_with 422 }
+	end
+
+
+	end
+
+describe "DELETE #destroy" do
+	before(:each) do
+		@user = FactoryGirl.create(:user)
+		@product = FactoryGirl.create(:product, user: @user)
+		request.headers["Authorization"] = @user.auth_token
+		delete :destroy, { user_id: @user.id, id: @product.id }
+	end
+
+	it { should respond_with 204 }
+end
+
+
+
 
 end

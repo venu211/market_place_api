@@ -10,7 +10,7 @@ describe "#GET #show" do
 
 	it "returns the information about the reporter on a hash" do
 		product_response = json_response
-		expect(product_response[:title]).to eql @product.title
+		expect(product_response[:product][:title]).to eql @product.title
 	end
 
 	it { should respond_with 200 }
@@ -24,7 +24,7 @@ describe "#GET index" do
 
 	it "returns 4 records from the database" do
 		products_response = json_response
-		expect(json_response.size).to eq(4)
+		expect(json_response[:products]).to have(4).items
 	end
 
 	it { should respond_with 200 }
@@ -43,7 +43,7 @@ describe "POST #create" do
 
 		it "renders the json response for the record just created" do
 			product_response = json_response
-			expect(product_response[:title]).to eql @product_attributes[:title]
+			expect(product_response[:product][:title]).to eql @product_attributes[:title]
 		end
 
 		it { should respond_with 201 }
@@ -86,7 +86,7 @@ describe "PATCH #update" do
 
 		it "renders the json response for the updated product" do
 			product_response = json_response
-			expect(product_response[:title]). to eql "An Expensive TV"
+			expect(product_response[:product][:title]). to eql "An Expensive TV"
 		end
 
 		it { should respond_with 200 }

@@ -20,6 +20,13 @@ describe "Get #show" do
 	end
 
 	it { should respond_with 200 }
+
+	it "has the product ids as an embeded object" do
+		user_response = json_response[:user]
+		expect(user_response[:product_ids]).to eql []
+	end
+	
+
 end
 
 describe "POST #create" do

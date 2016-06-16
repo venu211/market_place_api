@@ -78,6 +78,45 @@ describe ".recent" do
       expect(Product.recent).to match_array([@product3, @product2, @product4, @product1])
     end
   end
-  
+
+describe ".search" do
+  before(:each) do
+      @product1 = FactoryGirl.create :product, price: 100, title: "Plasma tv"
+      @product2 = FactoryGirl.create :product, price: 50, title: "Videogame console"
+      @product3 = FactoryGirl.create :product, price: 150, title: "MP3"
+      @product4 = FactoryGirl.create :product, price: 99, title: "Laptop"
+  end
+
+context "when a title of videogame and a min price of 100 are set" do
+  it "returns an empty array" do
+    search_hash = { keyword: "videogame", min_price: 100 }
+    expect(Product.search(search_hash)).to be_empty
+  end
+end
+
+context "when title TV and min price 50 and max price 150 are set" do
+  it "returns product1" do
+    search_hash = { keyword: "tv", min_price: 50, max_price: 150}
+    expect(Product.search(search_hash)).to match_array([@product1])
+  end
+end
+
+context "when an empty hash is sent" do
+  it "retruns all the products" do
+    expect(Product.search({})).to match_array([@product1, @product2, @product3, @product4])
+  end
+end
+
+context "when product_ids are present" do
+  it "retruns the products from ids" do
+    search_hash = { product_ids: [@product1.id, @product2.id] }
+    expect(Product.search(search_hash)).to match_array([@product1, @product2])
+  end
+end
+
+end
+
+
+
 
 end
